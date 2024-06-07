@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%sveltekit.assets%/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tauri + SvelteKit + Typescript App</title>
+    %sveltekit.head%
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
+</html>
+
+<style>
+  :root {
+    --background-color: #24273a;
+    --text-color: #cdd6f4;
+    --secondary-bg-color: #1e2030;
+    --active-outline-color: #b7bdf8;
+    --inactive-outline-color: #6e738d;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    height: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+
+    background-color: var(--background-color);
+  }
+
+  body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    justify-content: center;
+
+    color: var(--text-color);
+  }
+</style>
