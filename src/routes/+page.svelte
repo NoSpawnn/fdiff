@@ -12,12 +12,7 @@
   let left_text_diff = "";
   let right_text_diff = "";
   let submitted = false;
-
-  $: submitted, setInputState();
-
-  let input_areas = document.getElementsByClassName("text-input");
-  let submitted_areas = document.getElementsByClassName("text-submitted");
-
+  
   function scroll(e: Event) {
     let left_text_area = document.getElementById("left-text-input");
     let right_text_area = document.getElementById("right-text-input");
@@ -37,16 +32,6 @@
       case "right-text-submitted":
         left_text_submitted!.scrollTop = right_text_submitted!.scrollTop;
         break;
-    }
-  }
-
-  function setInputState() {
-    for (let i = 0; i < input_areas.length; i++) {
-      let input_elem = input_areas.item(i) as HTMLTextAreaElement;
-      input_elem.style.display = submitted ? "none" : "block";
-
-      let submitted_elem = submitted_areas.item(i) as HTMLDivElement;
-      submitted_elem.style.display = submitted ? "block" : "none";
     }
   }
 
@@ -85,28 +70,35 @@
 
 <div class="container">
   <div class="text-container">
-    <div class="text-input-container">
-      <textarea
-        class="text-input"
-        id="left-text-input"
-        on:scroll={scroll}
-        bind:value={left_text_input}
-      />
-      <textarea
-        class="text-input"
-        id="right-text-input"
-        on:scroll={scroll}
-        bind:value={right_text_input}
-      />
-    </div>
-    <div class="text-submitted-container">
-      <div class="text-submitted" on:scroll={scroll} id="left-text-submitted">
-        {@html left_text_diff}
+    {#if !submitted}
+      <div class="text-input-container">
+        <textarea
+          class="text-input"
+          id="left-text-input"
+          on:scroll={scroll}
+          bind:value={left_text_input}
+        />
+        <textarea
+          class="text-input"
+          id="right-text-input"
+          on:scroll={scroll}
+          bind:value={right_text_input}
+        />
       </div>
-      <div class="text-submitted" on:scroll={scroll} id="right-text-submitted">
-        {@html right_text_diff}
+    {:else}
+      <div class="text-submitted-container">
+        <div class="text-submitted" on:scroll={scroll} id="left-text-submitted">
+          {@html left_text_diff}
+        </div>
+        <div
+          class="text-submitted"
+          on:scroll={scroll}
+          id="right-text-submitted"
+        >
+          {@html right_text_diff}
+        </div>
       </div>
-    </div>
+    {/if}
   </div>
 
   <div class="buttons-container">
@@ -167,7 +159,6 @@
   }
 
   .text-submitted {
-    display: none;
     border: solid 2px var(--inactive-outline-color);
     border-radius: 5px;
     padding: 0.3rem;
