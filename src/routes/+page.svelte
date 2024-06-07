@@ -1,30 +1,57 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/tauri";
 
-  let text_left = "";
-  let text_right = "";
-  let response = "";
+  interface LineDiff {
+    left_text: string;
+    right_text: string;
+    is_diff: boolean;
+  }
+
+  let left_text_input = "";
+  let right_text_input = "";
+  let left_text_diff = "";
+  let right_text_diff = "";
   let submitted = false;
 
   function setInputState() {
-    let text_inputs = document.getElementsByClassName("text-input");
-    let text_submitted = document.getElementsByClassName("text-submitted");
+    let inputs = document.getElementsByClassName("text-input");
+    let submitted = document.getElementsByClassName("text-submitted");
 
-    for (let i = 0; i < text_inputs.length; i++) {
-      let input_elem = text_inputs.item(i) as HTMLTextAreaElement;
+    for (let i = 0; i < inputs.length; i++) {
+      let input_elem = inputs.item(i) as HTMLTextAreaElement;
       input_elem.style.display = submitted ? "none" : "block";
 
-      let submit_elem = text_submitted.item(i) as HTMLDivElement;
+      let submit_elem = submitted.item(i) as HTMLDivElement;
       submit_elem.style.display = submitted ? "block" : "none";
     }
   }
 
-  async function submit(event: Event) {
+  async function submit() {
     submitted = true;
     setInputState();
 
-    invoke("submit", { text1: text_left, text2: text_right }).then((v) => {
-      response = v as string;
+    invoke("get_diff", {
+      left_text: left_text_input,
+      right_text: right_text_input,
+    }).then((response) => {
+      left_text_diff = "";
+      right_text_diff = "";
+
+      (response as LineDiff[]).forEach((diffEntry) => {
+        if (diffEntry.is_diff) {
+          left_text_diff +=
+            '<span style="background-color: var(--text-diff-bg-color);">' +
+            diffEntry.left_text +
+            "</span><br>";
+          right_text_diff +=
+            '<span style="background-color: var(--text-diff-bg-color);">' +
+            diffEntry.right_text +
+            "</span><br>";
+        } else {
+          left_text_diff += diffEntry.left_text + "<br>";
+          right_text_diff += diffEntry.right_text + "<br>";
+        }
+      });
     });
   }
 
@@ -37,12 +64,12 @@
 <div class="container">
   <div class="text-container">
     <div class="text-input-container">
-      <textarea class="text-input" bind:value={text_left} />
-      <textarea class="text-input" bind:value={text_right} />
+      <textarea class="text-input" bind:value={left_text_input} />
+      <textarea class="text-input" bind:value={right_text_input} />
     </div>
     <div class="text-submitted-container">
-      <div class="text-submitted">{text_left}</div>
-      <div class="text-submitted">{text_right}</div>
+      <div class="text-submitted">{@html left_text_diff}</div>
+      <div class="text-submitted">{@html right_text_diff}</div>
     </div>
   </div>
 
@@ -105,6 +132,7 @@
     width: 45vw;
     color: var(--text-color);
     background-color: var(--secondary-bg-color);
+    white-space: pre-wrap;
   }
 
   button {
