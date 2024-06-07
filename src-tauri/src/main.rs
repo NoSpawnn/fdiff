@@ -44,7 +44,7 @@ fn get_diff(left_text: &str, right_text: &str) -> Vec<LineDiff> {
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            #[cfg(debug_assertions)]
+            #[cfg(debug_assertions)] // Only in dev mode
             {
                 let window = app.get_window("main").unwrap();
                 window.open_devtools();
