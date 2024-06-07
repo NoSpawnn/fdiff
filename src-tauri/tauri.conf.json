@@ -25,10 +25,10 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": null 
     },
     "bundle": {
-      "active": true,
+      "active": false,
       "targets": "all",
       "identifier": "com.nospawnn.fdiff",
       "icon": [
