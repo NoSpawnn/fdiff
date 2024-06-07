@@ -11,7 +11,7 @@ struct LineDiff {
 }
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
+#[tauri::command(rename_all = "snake_case")]
 fn get_diff(left_text: &str, right_text: &str) -> Vec<LineDiff> {
     let mut line_diffs: Vec<LineDiff> = Vec::new();
     let mut text1_lines = left_text.lines();
@@ -19,33 +19,21 @@ fn get_diff(left_text: &str, right_text: &str) -> Vec<LineDiff> {
 
     loop {
         match (text1_lines.next(), text2_lines.next()) {
-            (Some(x), Some(y)) => {
-                println!("left={x}, right={y}");
-
-                line_diffs.push(LineDiff {
-                    left_text: x.to_string(),
-                    right_text: y.to_string(),
-                    is_diff: x != y,
-                })
-            }
-            (Some(x), None) => {
-                println!("left={x}, right=none");
-
-                line_diffs.push(LineDiff {
-                    left_text: x.to_string(),
-                    right_text: "".to_string(),
-                    is_diff: true,
-                })
-            }
-            (None, Some(y)) => {
-                println!("right={y}, right=none");
-
-                line_diffs.push(LineDiff {
-                    left_text: "".to_string(),
-                    right_text: y.to_string(),
-                    is_diff: true,
-                })
-            }
+            (Some(x), Some(y)) => line_diffs.push(LineDiff {
+                left_text: x.to_string(),
+                right_text: y.to_string(),
+                is_diff: x != y,
+            }),
+            (Some(x), None) => line_diffs.push(LineDiff {
+                left_text: x.to_string(),
+                right_text: "".to_string(),
+                is_diff: true,
+            }),
+            (None, Some(y)) => line_diffs.push(LineDiff {
+                left_text: "".to_string(),
+                right_text: y.to_string(),
+                is_diff: true,
+            }),
             (None, None) => break,
         }
     }
