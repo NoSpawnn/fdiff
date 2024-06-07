@@ -137,7 +137,9 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+    max-height: 100%;
     width: 100%;
+    max-width: 100%;
   }
 
   .text-input-container,
@@ -153,6 +155,7 @@
     border: solid 2px var(--active-outline-color);
     border-radius: 5px;
     width: 45vw;
+    max-width: 45vw;
     font-size: 15px;
     padding: 0.3rem;
     background-color: var(--secondary-bg-color);
@@ -170,9 +173,10 @@
     padding: 0.3rem;
     font-size: 15px;
     width: 45vw;
+    max-width: 45vw;
     background-color: var(--secondary-bg-color);
     white-space: pre-wrap;
-    overflow: scroll;
+    overflow: auto;
   }
 
   .buttons-container {
