@@ -14,11 +14,11 @@ struct LineDiff {
 #[tauri::command(rename_all = "snake_case")]
 fn get_diff(left_text: &str, right_text: &str) -> Vec<LineDiff> {
     let mut line_diffs: Vec<LineDiff> = Vec::new();
-    let mut text1_lines = left_text.lines();
-    let mut text2_lines = right_text.lines();
+    let mut left_text_lines = left_text.lines();
+    let mut right_text_lines = right_text.lines();
 
     loop {
-        match (text1_lines.next(), text2_lines.next()) {
+        match (left_text_lines.next(), right_text_lines.next()) {
             (Some(x), Some(y)) => line_diffs.push(LineDiff {
                 left_text: x.to_string(),
                 right_text: y.to_string(),
